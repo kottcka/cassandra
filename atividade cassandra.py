@@ -43,14 +43,21 @@ class ListaDeTarefasCassandra:
         query = f"DELETE FROM {self.tabela} WHERE id = %s"
         self.session.execute(query, (tarefa_id,))
         print(f"Tarefa com ID {tarefa_id} foi removida.")
+    
+    def visualizar_descricao_tarefa(self, tarefa_id):
+        query = f"SELECT description FROM {self.tabela} WHERE id = %s"
+        result = self.session.execute(query, (tarefa_id,))
+        for row in result:
+            print(f"Descrição da Tarefa (ID {tarefa_id}): {row.description}")
 
     def menu_principal(self):
         while True:
             print("\n----- Lista de Tarefas -----")
             print("1. Adicionar Tarefa")
             print("2. Listar Tarefas")
-            print("3. Remover Tarefa")
-            print("4. Sair")
+            print("3. Visualizar Descrição da Tarefa")
+            print("4. Remover Tarefa")
+            print("5. Sair")
 
             opcao = input("\nEscolha uma opção: ")
 
@@ -61,9 +68,12 @@ class ListaDeTarefasCassandra:
             elif opcao == '2':
                 self.listar_tarefas()
             elif opcao == '3':
+                tarefa_id = int(input("Digite o ID da tarefa que deseja visualizar: "))
+                self.visualizar_descricao_tarefa(tarefa_id)
+            elif opcao == '4':
                 tarefa_id = int(input("Digite o ID da tarefa que deseja remover: "))
                 self.remover_tarefa(tarefa_id)
-            elif opcao == '4':
+            elif opcao == '5':
                 print("Saindo...")
                 break
             else:
@@ -72,4 +82,4 @@ class ListaDeTarefasCassandra:
 if __name__ == "__main__":
     lista_tarefas_cassandra = ListaDeTarefasCassandra()
     lista_tarefas_cassandra.menu_principal()
-1
+
